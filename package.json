@@ -1,0 +1,38 @@
+{
+  "name": "rabbitmq-practice",
+  "version": "1.0.0",
+  "description": "Professional RabbitMQ practice project covering all core messaging patterns",
+  "main": "src/config/connection.js",
+  "scripts": {
+    "basic:producer": "node src/01-basic/producer.js",
+    "basic:consumer": "node src/01-basic/consumer.js",
+    "work:producer": "node src/02-work-queues/producer.js",
+    "work:worker": "node src/02-work-queues/worker.js",
+    "pubsub:publisher": "node src/03-pub-sub/publisher.js",
+    "pubsub:subscriber": "node src/03-pub-sub/subscriber.js",
+    "routing:producer": "node src/04-routing/producer.js",
+    "routing:consumer": "node src/04-routing/consumer.js",
+    "topics:producer": "node src/05-topics/producer.js",
+    "topics:consumer": "node src/05-topics/consumer.js",
+    "rpc:server": "node src/06-rpc/server.js",
+    "rpc:client": "node src/06-rpc/client.js",
+    "dlx:producer": "node src/07-dead-letter/producer.js",
+    "dlx:consumer": "node src/07-dead-letter/consumer.js",
+    "test": "jest --verbose",
+    "test:coverage": "jest --coverage"
+  },
+  "keywords": [
+    "rabbitmq",
+    "amqp",
+    "messaging",
+    "queue",
+    "practice"
+  ],
+  "license": "GPL-3.0",
+  "dependencies": {
+    "amqplib": "^0.10.4"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

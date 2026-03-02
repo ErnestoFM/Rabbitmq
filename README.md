@@ -1,6 +1,6 @@
-# RabbitMQ Practice Project
+# RabbitMQ Web Dashboard
 
-A professional, hands-on project for learning and practicing all core RabbitMQ messaging patterns using **Node.js** and **amqplib**.
+A full-stack web application for learning and practicing all core RabbitMQ messaging patterns, built with **React**, **Express**, **Socket.IO**, and **amqplib**.
 
 ## Prerequisites
 
@@ -15,141 +15,76 @@ A professional, hands-on project for learning and practicing all core RabbitMQ m
 docker compose up -d
 ```
 
-The management UI is available at [http://localhost:15672](http://localhost:15672) (user: `guest`, password: `guest`).
+The RabbitMQ management UI is available at [http://localhost:15672](http://localhost:15672) (user: `guest`, password: `guest`).
 
 ### 2. Install Dependencies
 
 ```bash
+# Install server dependencies
 npm install
+
+# Install client dependencies
+cd client && npm install && cd ..
 ```
 
-### 3. Run Examples
+### 3. Run in Development Mode
 
-Each example is self-contained. Open **two terminals** — one for the consumer/subscriber/server, and another for the producer/publisher/client.
+```bash
+npm run dev
+```
+
+This starts both the Express backend (port 3001) and the Vite dev server (port 5173) concurrently.
+
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+### 4. Run in Production Mode
+
+```bash
+npm start
+```
+
+This builds the React client and serves everything from the Express server on port 3001.
+
+Open [http://localhost:3001](http://localhost:3001) in your browser.
 
 ---
 
-## Examples
-
-### 01 — Basic (Point-to-Point)
-
-The simplest pattern: one producer sends a message directly to a named queue, one consumer reads it.
-
-```bash
-# Terminal 1
-npm run basic:consumer
-
-# Terminal 2
-npm run basic:producer
-```
-
-### 02 — Work Queues (Competing Consumers)
-
-Multiple workers share a task queue. Each task is delivered to exactly one worker. Uses `prefetch(1)` for fair dispatch and manual acknowledgments.
-
-```bash
-# Terminal 1 (worker A)
-npm run work:worker
-
-# Terminal 2 (worker B)
-npm run work:worker
-
-# Terminal 3
-npm run work:producer
-```
-
-### 03 — Publish/Subscribe (Fanout Exchange)
-
-A fanout exchange broadcasts every message to all bound queues. Each subscriber receives a copy.
-
-```bash
-# Terminal 1
-npm run pubsub:subscriber
-
-# Terminal 2
-npm run pubsub:subscriber
-
-# Terminal 3
-npm run pubsub:publisher
-```
-
-### 04 — Routing (Direct Exchange)
-
-A direct exchange routes messages to queues whose binding key matches the routing key exactly.
-
-```bash
-# Terminal 1 — receives only errors
-node src/04-routing/consumer.js error
-
-# Terminal 2 — receives info and warning
-node src/04-routing/consumer.js info warning
-
-# Terminal 3
-npm run routing:producer
-```
-
-### 05 — Topics (Topic Exchange)
-
-A topic exchange routes messages using wildcard patterns:
-- `*` matches exactly one word
-- `#` matches zero or more words
-
-```bash
-# Terminal 1 — all auth messages
-node src/05-topics/consumer.js "auth.*"
-
-# Terminal 2 — all errors
-node src/05-topics/consumer.js "*.error"
-
-# Terminal 3
-npm run topics:producer
-```
-
-### 06 — RPC (Remote Procedure Call)
-
-Request/reply pattern using a temporary reply queue and `correlationId`.
-
-```bash
-# Terminal 1
-npm run rpc:server
-
-# Terminal 2
-node src/06-rpc/client.js 30
-```
-
-### 07 — Dead Letter Exchange (DLX)
-
-Messages that are rejected or expire are automatically routed to a dead letter exchange for monitoring or retry.
-
-```bash
-# Terminal 1
-npm run dlx:consumer
-
-# Terminal 2
-npm run dlx:producer
-```
-
----
-
-## Project Structure
+## Architecture
 
 ```
-├── docker-compose.yml            # RabbitMQ + Management UI
-├── package.json
-├── src/
+├── server/
+│   └── index.js                  # Express + Socket.IO backend
+├── client/                       # React frontend (Vite)
+│   ├── src/
+│   │   ├── App.jsx               # Main app with tab navigation
+│   │   ├── panels/               # UI panels for each pattern
+│   │   │   ├── BasicPanel.jsx
+│   │   │   ├── WorkQueuesPanel.jsx
+│   │   │   ├── PubSubPanel.jsx
+│   │   │   ├── RoutingPanel.jsx
+│   │   │   ├── TopicsPanel.jsx
+│   │   │   ├── RpcPanel.jsx
+│   │   │   └── DeadLetterPanel.jsx
+│   │   └── index.css             # Global styles
+│   └── vite.config.js
+├── src/                          # Core RabbitMQ logic (console scripts)
 │   ├── config/
 │   │   └── connection.js         # Shared connection helper
-│   ├── 01-basic/                 # Point-to-point messaging
-│   ├── 02-work-queues/           # Competing consumers
-│   ├── 03-pub-sub/               # Fanout exchange
-│   ├── 04-routing/               # Direct exchange
-│   ├── 05-topics/                # Topic exchange
-│   ├── 06-rpc/                   # Remote Procedure Call
-│   └── 07-dead-letter/           # Dead Letter Exchange
-└── tests/                        # Unit tests
+│   ├── 01-basic/
+│   ├── 02-work-queues/
+│   ├── 03-pub-sub/
+│   ├── 04-routing/
+│   ├── 05-topics/
+│   ├── 06-rpc/
+│   └── 07-dead-letter/
+├── tests/                        # Unit tests
+├── docker-compose.yml            # RabbitMQ + Management UI
+└── package.json
 ```
 
-## Key Concepts Covered
+## Messaging Patterns
+
+The dashboard provides an interactive UI for all 7 patterns:
 
 | # | Pattern | Exchange Type | Description |
 |---|---------|--------------|-------------|
@@ -158,14 +93,41 @@ npm run dlx:producer
 | 03 | Pub/Sub | `fanout` | Broadcast to all subscribers |
 | 04 | Routing | `direct` | Route by exact routing key |
 | 05 | Topics | `topic` | Route by wildcard patterns |
-| 06 | RPC | *(default)* | Request/reply with correlation |
+| 06 | RPC | *(default)* | Request/reply with Fibonacci computation |
 | 07 | Dead Letter | `fanout` + `direct` | Failed message handling |
+
+### Using the Dashboard
+
+1. **Select a pattern** using the tabs at the top
+2. **Start a consumer/subscriber** by clicking the green button
+3. **Send messages** using the form and the orange button
+4. **Watch messages** appear in real-time in the message log
+5. **Stop the consumer** when done
+
+## Console Scripts (Legacy)
+
+The original console scripts are still available:
+
+```bash
+# Example: Basic pattern
+npm run basic:consumer   # Terminal 1
+npm run basic:producer   # Terminal 2
+```
+
+See each folder in `src/` for the full list of scripts.
 
 ## Tests
 
 ```bash
 npm test
 ```
+
+## Tech Stack
+
+- **Frontend**: React 19 + Vite
+- **Backend**: Express 5 + Socket.IO 4
+- **Messaging**: RabbitMQ via amqplib
+- **Real-time**: WebSocket (Socket.IO)
 
 ## License
 

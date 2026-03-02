@@ -1,0 +1,286 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
+  line-height: 1.6;
+}
+
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.app-header h1 {
+  font-size: 2rem;
+  color: #f97316;
+  margin-bottom: 0.25rem;
+}
+
+.app-header p {
+  color: #94a3b8;
+  font-size: 0.95rem;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #1e293b;
+  padding-bottom: 0.75rem;
+}
+
+.tab-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid #334155;
+  border-radius: 0.5rem;
+  background: #1e293b;
+  color: #cbd5e1;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.tab-btn:hover {
+  background: #334155;
+}
+
+.tab-btn.active {
+  background: #f97316;
+  color: #0f172a;
+  border-color: #f97316;
+  font-weight: 600;
+}
+
+/* Pattern panel */
+.pattern-panel {
+  background: #1e293b;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid #334155;
+}
+
+.pattern-panel h2 {
+  font-size: 1.25rem;
+  color: #f97316;
+  margin-bottom: 0.25rem;
+}
+
+.pattern-panel .description {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin-bottom: 1.25rem;
+}
+
+/* Form controls */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin-bottom: 0.25rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #475569;
+  border-radius: 0.5rem;
+  background: #0f172a;
+  color: #e2e8f0;
+  font-size: 0.9rem;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #f97316;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+/* Buttons */
+.btn {
+  padding: 0.5rem 1.25rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: #f97316;
+  color: #0f172a;
+}
+
+.btn-primary:hover {
+  background: #fb923c;
+}
+
+.btn-success {
+  background: #22c55e;
+  color: #0f172a;
+}
+
+.btn-success:hover {
+  background: #4ade80;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #f87171;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Actions row */
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Messages log */
+.messages-section {
+  margin-top: 1.5rem;
+}
+
+.messages-section h3 {
+  font-size: 1rem;
+  color: #cbd5e1;
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.messages-section h3 .badge {
+  background: #334155;
+  padding: 0.15rem 0.5rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.messages-log {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 0.5rem;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 0.75rem;
+}
+
+.message-item {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid #1e293b;
+  font-size: 0.85rem;
+  font-family: "Fira Code", "Cascadia Code", monospace;
+}
+
+.message-item:last-child {
+  border-bottom: none;
+}
+
+.message-item .time {
+  color: #64748b;
+  margin-right: 0.5rem;
+}
+
+.message-item .tag {
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+.tag-sent { background: #1d4ed8; color: #bfdbfe; }
+.tag-received { background: #15803d; color: #bbf7d0; }
+.tag-info { background: #0e7490; color: #cffafe; }
+.tag-warning { background: #a16207; color: #fef3c7; }
+.tag-error { background: #b91c1c; color: #fee2e2; }
+.tag-rejected { background: #b91c1c; color: #fee2e2; }
+.tag-processed { background: #15803d; color: #bbf7d0; }
+.tag-dead-letter { background: #7e22ce; color: #e9d5ff; }
+.tag-result { background: #6d28d9; color: #ede9fe; }
+
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.status-dot.connected { background: #22c55e; }
+.status-dot.disconnected { background: #ef4444; }
+
+.connection-status {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.checkbox-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  color: #cbd5e1;
+  cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: auto;
+  accent-color: #f97316;
+}
+
+.empty-state {
+  text-align: center;
+  color: #64748b;
+  padding: 2rem;
+  font-size: 0.9rem;
+}

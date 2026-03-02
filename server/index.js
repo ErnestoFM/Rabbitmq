@@ -8,7 +8,8 @@ const { fibonacci } = require("../src/06-rpc/server");
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: "*" } });
+const ALLOWED_ORIGINS = process.env.CORS_ORIGIN || "http://localhost:5173";
+const io = new Server(server, { cors: { origin: ALLOWED_ORIGINS.split(",") } });
 
 app.use(cors());
 app.use(express.json());
@@ -287,7 +288,7 @@ io.on("connection", (socket) => {
           await channel.bindQueue(WORK_QUEUE, WORK_EXCHANGE, "task");
           channel.prefetch(1);
 
-          await channel.consume(WORK_QUEUE, (msg) => {
+          const { consumerTag: workTag } = await channel.consume(WORK_QUEUE, (msg) => {
             if (msg) {
               const body = msg.content.toString();
               if (body.includes("fail")) {
@@ -308,7 +309,7 @@ io.on("connection", (socket) => {
             }
           });
 
-          const { consumerTag: tag } = await channel.consume(DLX_QUEUE, (msg) => {
+          const { consumerTag: dlxTag } = await channel.consume(DLX_QUEUE, (msg) => {
             if (msg) {
               emitMessage(socket.id, "message", {
                 pattern: "dead-letter",
@@ -318,7 +319,7 @@ io.on("connection", (socket) => {
               channel.ack(msg);
             }
           });
-          consumerTag = tag;
+          consumerTag = `${workTag},${dlxTag}`;
           break;
         }
 
